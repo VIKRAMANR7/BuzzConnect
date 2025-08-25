@@ -1,8 +1,9 @@
 import cors from "cors";
 import "dotenv/config";
 import express from "express";
+import { serve } from "inngest/express";
 import connectDB from "./configs/db.js";
-import { inngest, functions } from "./inngest/index.js";
+import { functions, inngest } from "./inngest/index.js";
 
 const app = express();
 
