@@ -31,7 +31,8 @@
 //   );
 // }
 
-import { useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import ChatBox from "./pages/ChatBox";
@@ -46,6 +47,13 @@ import Profile from "./pages/Profile";
 
 export default function App() {
   const { user } = useUser();
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      getToken().then((token) => console.log(token));
+    }
+  }, [user]);
 
   return (
     <>
@@ -69,3 +77,7 @@ export default function App() {
     </>
   );
 }
+
+
+
+
