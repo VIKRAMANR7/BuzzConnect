@@ -24,6 +24,10 @@ app.get("/", (req, res) => {
   res.send("Buzzconnect Server is Live");
 });
 app.use("/api/inngest", serve({ client: inngest, functions }));
+app.post("/api/test-clerk-webhook", async (req, res) => {
+  console.log("Webhook received:", req.body);
+  res.status(200).json({ received: true });
+});
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
 app.use("/api/story", storyRouter);

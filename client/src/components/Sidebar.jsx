@@ -1,12 +1,13 @@
 import { UserButton, useClerk } from "@clerk/clerk-react";
 import { CirclePlus, LogOut } from "lucide-react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { assets, dummyUserData } from "../assets/assets";
+import { assets } from "../assets/assets";
 import MenuItems from "./MenuItems";
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const navigate = useNavigate();
-  const user = dummyUserData;
+  const user = useSelector((state) => state.user.value);
   const { signOut } = useClerk();
   return (
     <div
@@ -20,7 +21,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
           onClick={() => navigate("/")}
           src={assets.logo}
           alt=""
-          className="w-26 ml-7 my-2 cursor-pointer"
+          className="w-60 ml-4 my-2 cursor-pointer"
         />
         <hr className="border-gray-300 mb-8" />
         <MenuItems setSidebarOpen={setSidebarOpen} />

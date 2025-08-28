@@ -56,6 +56,31 @@ const syncUserDeletion = inngest.createFunction(
   async ({ event }) => {
     const { id } = event.data;
 
+    // Delete all connections involving this user
+    await Connection.deleteMany({
+      $or: [{ from_user_id: id }, { to_user_id: id }],
+    });
+
+    // Remove user from others' followers/following/connections arrays
+    await User.updateMany(
+      {},
+      {
+        $pull: {
+          followers: id,
+          following: id,
+          connections: id,
+        },
+      }
+    );
+
+    // Delete user's posts, stories, messages
+    await Post.deleteMany({ user: id });
+    await Story.deleteMany({ user: id });
+    await Message.deleteMany({
+      $or: [{ from_user_id: id }, { to_user_id: id }],
+    });
+
+    // Finally delete the user
     await User.findByIdAndDelete(id);
   }
 );
@@ -154,7 +179,7 @@ const sendNotificationOfUnseenMessages = inngest.createFunction(
     });
     for (const userId in unseenCount) {
       const user = await User.findById(userId);
-      const subject = `✉️ You have ${unseenCount[userId]} new messages`;
+      const subject = `✉️ You have ${unseenCount[userId]} unseen messages`;
       const body = `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
       <h2>Hi ${user.full_name},</h2>

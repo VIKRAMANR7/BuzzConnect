@@ -1,8 +1,9 @@
 import { ClerkProvider } from "@clerk/clerk-react";
 import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
-import { AppProvider } from "./context/AppContext.jsx";
+import { store } from "./app/store.js";
 import "./index.css";
 
 // Import your Publishable Key
@@ -15,9 +16,9 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById("root")).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
     <BrowserRouter>
-      <AppProvider>
+      <Provider store={store}>
         <App />
-      </AppProvider>
+      </Provider>
     </BrowserRouter>
   </ClerkProvider>
 );

@@ -1,16 +1,34 @@
+import { useAuth } from "@clerk/clerk-react";
 import { Plus } from "lucide-react";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { dummyStoriesData } from "../assets/assets";
+import toast from "react-hot-toast";
+import api from "../api/axios";
 import StoryModal from "./StoryModal";
 import StoryViewer from "./StoryViewer";
 
 export default function StoriesBar() {
+  const { getToken } = useAuth();
+
   const [stories, setStories] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [viewStory, setViewStory] = useState(null);
   const fetchStories = async () => {
-    setStories(dummyStoriesData);
+    try {
+      const token = await getToken();
+      const { data } = await api.get("/api/story/get", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (data.success) {
+        setStories(data.stories);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   useEffect(() => {
     fetchStories();
@@ -46,7 +64,7 @@ export default function StoriesBar() {
               {story.content}
             </p>
             <p className="text-white absolute bottom-1 right-2 z-10 text-xs">
-              {moment(story.created_at).fromNow()}
+              {moment(story.createdAt).fromNow()}
             </p>
             {story.media_type !== "text" && (
               <div className="absolute inset-0 z-1 rounded-lg bg-black overflow-hidden">

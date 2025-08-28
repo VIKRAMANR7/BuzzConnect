@@ -1,6 +1,6 @@
+import { SignIn } from "@clerk/clerk-react";
 import { Star } from "lucide-react";
 import { assets } from "../assets/assets";
-import {SignIn} from "@clerk/clerk-react"
 export default function Login() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
@@ -12,7 +12,7 @@ export default function Login() {
       />
       {/* Left Side Branding */}
       <div className="flex-1 flex flex-col items-start justify-between p-6 md:p-10 lg:pl-40">
-        <img src={assets.logo} alt="" className="h-12 object-contain" />
+        <img src={assets.logo} alt="" className="h-20 object-contain" />
         <div>
           <div className="flex items-center gap-3 mb-4 max-md:mt-10">
             <img src={assets.group_users} alt="" />
@@ -41,7 +41,7 @@ export default function Login() {
       </div>
       {/* Rign Side - Login Form */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-10">
-        <SignIn/>
+        <SignIn />
       </div>
     </div>
   );

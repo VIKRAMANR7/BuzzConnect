@@ -192,7 +192,7 @@ export const sendConnectionRequest = async (req, res) => {
       });
       return res.json({
         success: true,
-        message: "You have sent more than 20 connection requests in last 24hrs",
+        message: "Connection request sent successfully",
       });
     } else if (connection && connection.status === "accepted") {
       return res.json({
