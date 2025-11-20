@@ -6,7 +6,7 @@ import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express";
 
 import connectDB from "@/configs/db.js";
-import { functions, inngest } from "@/inngest/index.js";
+import { functions, inngest } from "./inngest/index";
 import messageRouter from "@/routes/messageRoutes.js";
 import postRouter from "@/routes/postRoutes.js";
 import storyRouter from "@/routes/storyRoutes.js";
