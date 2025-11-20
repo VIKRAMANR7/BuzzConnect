@@ -1,5 +1,0 @@
-ignoredBuiltDependencies:
-  - '@clerk/shared'
-  - bcrypt
-  - esbuild
-  - protobufjs
