@@ -54,21 +54,23 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-export async function startServer(): Promise<void> {
-  try {
-    await connectDB();
+if (process.env.NODE_ENV !== "production") {
+  const startServer = async () => {
+    try {
+      await connectDB();
+      const PORT = process.env.PORT || 4000;
+      app.listen(PORT, () => {
+        console.log(`🚀 Buzzconnect server running on port ${PORT}`);
+      });
+    } catch (err) {
+      console.error("❌ Failed to start server:", err);
+      process.exit(1);
+    }
+  };
 
-    const PORT = process.env.PORT || 4000;
-
-    app.listen(PORT, () => {
-      console.log(`🚀 Buzzconnect server running on port ${PORT}`);
-    });
-  } catch (err) {
-    console.error("❌ Failed to start server:", err);
-    process.exit(1);
-  }
+  startServer();
+} else {
+  connectDB().catch((err) => console.error("DB Connection Failed", err));
 }
 
 export default app;
-
-startServer();
