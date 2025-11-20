@@ -1,3 +1,62 @@
-node_modules
+# =========================================
+#  GLOBAL IGNORES — CLIENT + SERVER
+# =========================================
+
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.vite/
+.vercel/
+.out/
+
+# Typescript build info
+*.tsbuildinfo
+
+# Cache
+.cache/
+.tmp/
+.temp/
+.eslintcache
+
+# Environment files (exclude ONLY .env.example)
 .env
-.env.local
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================================
+#  PROJECT STRUCTURE (MONOREPO)
+# =========================================
+
+# Client-side (Vite + React)
+client/node_modules/
+client/dist/
+client/.vite/
+client/.env
+client/.env.*
+!client/.env.example
+
+# Server-side (Express + TS)
+server/node_modules/
+server/dist/
+server/.env
+server/.env.*
+!server/.env.example
