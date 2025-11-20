@@ -3,11 +3,15 @@
     "target": "ES2022",
     "lib": ["ES2022"],
 
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    // FIX: Avoid NodeNext bugs
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
 
     "rootDir": "./src",
     "outDir": "./dist",
+
+    // FIX: Proper Express types
+    "types": ["node", "express"],
 
     "baseUrl": "./",
     "paths": {
@@ -25,7 +29,6 @@
     "removeComments": true,
     "sourceMap": true,
     "skipLibCheck": true,
-
     "forceConsistentCasingInFileNames": true,
 
     "noUnusedLocals": false,
