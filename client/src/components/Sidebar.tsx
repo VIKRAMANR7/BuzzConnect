@@ -3,9 +3,9 @@ import { CirclePlus, LogOut } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import { assets } from "@/assets/assets";
-import MenuItems from "@/components/MenuItems";
-import type { RootState } from "@/types/store";
+import { assets } from "../assets/assets";
+import MenuItems from "../components/MenuItems";
+import type { RootState } from "../types/store";
 
 interface SidebarProps {
   sidebarOpen: boolean;

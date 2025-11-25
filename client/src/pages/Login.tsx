@@ -1,6 +1,6 @@
 import { SignIn } from "@clerk/clerk-react";
 import { Star } from "lucide-react";
-import { assets } from "@/assets/assets";
+import { assets } from "../assets/assets";
 
 export default function Login() {
   return (

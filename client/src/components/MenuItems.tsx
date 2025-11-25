@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useCallback } from "react";
-import { menuItemsData } from "@/assets/assets";
+import { menuItemsData } from "../assets/assets";
 
 interface MenuItemsProps {
   setSidebarOpen: (value: boolean) => void;

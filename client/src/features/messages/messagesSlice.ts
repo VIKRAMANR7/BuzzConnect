@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "@/api/axios";
-import type { ChatMessage } from "@/types/message";
+import api from "../../api/axios";
+import type { ChatMessage } from "../../types/message";
 
 interface MessagesState {
   messages: ChatMessage[];

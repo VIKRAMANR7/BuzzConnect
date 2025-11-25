@@ -1,4 +1,4 @@
-import type { DisplayUser } from "@/types/user";
+import type { DisplayUser } from "../types/user";
 
 export interface Story {
   _id: string;

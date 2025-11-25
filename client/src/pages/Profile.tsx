@@ -5,14 +5,14 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
-import api from "@/api/axios";
-import Loading from "@/components/Loading";
-import PostCard from "@/components/PostCard";
-import ProfileModal from "@/components/ProfileModal";
-import UserProfileInfo from "@/components/UserProfileInfo";
+import api from "../api/axios";
+import Loading from "../components/Loading";
+import PostCard from "../components/PostCard";
+import ProfileModal from "../components/ProfileModal";
+import UserProfileInfo from "../components/UserProfileInfo";
 
-import type { RootState } from "@/types/store";
-import type { DisplayUser } from "@/types/user";
+import type { RootState } from "../types/store";
+import type { DisplayUser } from "../types/user";
 
 interface Post {
   _id: string;

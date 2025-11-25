@@ -6,15 +6,12 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "pnpm clean && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "start": "node dist/server.js",
-    "clean": "rimraf dist",
-    "lint": "eslint \"src/**/*.{ts,js}\"",
-    "lint:fix": "eslint \"src/**/*.{ts,js}\" --fix",
+    "build": "tsc -p tsconfig.json",
+    "start": "node --enable-source-maps dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
     "format": "prettier --write \"src/**/*.{ts,js,json}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
-    "validate": "pnpm typecheck && pnpm lint && pnpm format:check"
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@clerk/backend": "^2.23.0",
@@ -42,13 +39,8 @@
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
     "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
-    "rimraf": "^5.0.10",
-    "tsc-alias": "^1.8.16",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }

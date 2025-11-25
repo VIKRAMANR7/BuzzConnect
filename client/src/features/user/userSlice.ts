@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "@/api/axios";
+import api from "../../api/axios";
 import { toast } from "react-hot-toast";
-import type { DisplayUser } from "@/types/user";
+import type { DisplayUser } from "../../types/user";
 
 interface UserState {
   value: DisplayUser | null;

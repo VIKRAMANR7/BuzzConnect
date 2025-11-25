@@ -5,8 +5,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 
-import api from "@/api/axios";
-import type { RootState } from "@/types/store";
+import api from "../api/axios";
+import type { RootState } from "../types/store";
 
 export default function CreatePost() {
   const navigate = useNavigate();

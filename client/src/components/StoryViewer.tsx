@@ -1,6 +1,6 @@
 import { BadgeCheck, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { Story } from "@/types/story";
+import type { Story } from "../types/story";
 
 interface Props {
   viewStory: Story;

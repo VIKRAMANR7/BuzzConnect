@@ -1,5 +1,5 @@
-import type { ChatMessage } from "@/types/message";
-import type { DisplayUser } from "@/types/user";
+import type { ChatMessage } from "../types/message";
+import type { DisplayUser } from "../types/user";
 
 export interface UserState {
   value: DisplayUser | null;

@@ -3,13 +3,13 @@ import { Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import api from "@/api/axios";
-import Loading from "@/components/Loading";
-import UserCard from "@/components/UserCard";
-import { fetchUser } from "@/features/user/userSlice";
+import api from "../api/axios";
+import Loading from "../components/Loading";
+import UserCard from "../components/UserCard";
+import { fetchUser } from "../features/user/userSlice";
 
-import type { DisplayUser } from "@/types/user";
-import { useAppDispatch } from "@/app/useAppDispatch";
+import type { DisplayUser } from "../types/user";
+import { useAppDispatch } from "../app/useAppDispatch";
 
 export default function Discover() {
   const dispatch = useAppDispatch();

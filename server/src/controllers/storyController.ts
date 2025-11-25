@@ -1,84 +1,76 @@
 import type { Request, Response } from "express";
 import fs from "fs";
-import imagekit from "@/configs/imageKit.js";
-import Story, { type IStory } from "@/models/Story.js";
-import User from "@/models/User.js";
-import { inngest } from "@/inngest/index.js";
-import { getAuthUserId } from "@/utils/getAuthUserId.js";
-import { handleControllerError } from "@/utils/handleError.js";
+import imagekit from "../configs/imageKit.js";
 
-export async function addUserStory(req: Request, res: Response): Promise<void> {
-  try {
-    const userId = await getAuthUserId(req);
+import Story, { type IStory } from "../models/Story.js";
+import User from "../models/User.js";
 
-    const { content, media_type, background_color } = req.body;
-    const media = req.file;
+import { inngest } from "../inngest/index.js";
+import { getAuthUserId } from "../utils/getAuthUserId.js";
 
-    let media_url = "";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
-    // If story has image/video media, upload it to ImageKit to get a reliable URL
-    if (media && (media_type === "image" || media_type === "video")) {
-      const buffer = fs.readFileSync(media.path);
+export const addUserStory = asyncHandler(async (req: Request, res: Response) => {
+  const userId = await getAuthUserId(req);
 
-      const uploaded = await imagekit.upload({
-        file: buffer,
-        fileName: media.originalname,
-        folder: "stories",
-      });
+  const { content, media_type, background_color } = req.body;
+  const media = req.file;
 
-      media_url = uploaded.url;
-    }
+  let media_url = "";
 
-    // Prepare the story data following the schema structure
-    const storyData: IStory = {
-      user: userId,
-      content,
-      media_url,
-      media_type,
-      background_color,
-      views_count: [],
-    };
+  // Upload media only for image/video stories
+  if (media && (media_type === "image" || media_type === "video")) {
+    const buffer = fs.readFileSync(media.path);
 
-    const story = await Story.create(storyData);
-
-    // Trigger a background event to delete this story after 24 hours
-    await inngest.send({
-      name: "app/story.delete",
-      data: { storyId: story._id.toString() },
+    const uploaded = await imagekit.upload({
+      file: buffer,
+      fileName: media.originalname,
+      folder: "stories",
     });
 
-    res.json({ success: true });
-  } catch (error: unknown) {
-    handleControllerError(res, error);
+    media_url = uploaded.url;
   }
-}
 
-export async function getStories(req: Request, res: Response): Promise<void> {
-  try {
-    const userId = await getAuthUserId(req);
+  const storyData: IStory = {
+    user: userId,
+    content,
+    media_url,
+    media_type,
+    background_color,
+    views_count: [],
+  };
 
-    const user = await User.findById(userId);
+  const story = await Story.create(storyData);
 
-    if (!user) {
-      res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-      return;
-    }
+  // Schedule deletion after 24 hrs via Inngest
+  await inngest.send({
+    name: "app/story.delete",
+    data: { storyId: story._id.toString() },
+  });
 
-    // Stories shown include the user's own stories plus those from connections/following
-    const userIds = [userId, ...user.connections, ...user.following];
+  res.json({ success: true });
+});
 
-    const stories = await Story.find({ user: { $in: userIds } })
-      .populate("user")
-      .sort({ createdAt: -1 });
+export const getStories = asyncHandler(async (req: Request, res: Response) => {
+  const userId = await getAuthUserId(req);
 
-    res.json({
-      success: true,
-      stories,
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({
+      success: false,
+      message: "User not found",
     });
-  } catch (error: unknown) {
-    handleControllerError(res, error);
   }
-}
+
+  // Stories include: user's + connections + following
+  const userIds = [userId, ...user.connections, ...user.following];
+
+  const stories = await Story.find({ user: { $in: userIds } })
+    .populate("user")
+    .sort({ createdAt: -1 });
+
+  res.json({
+    success: true,
+    stories,
+  });
+});

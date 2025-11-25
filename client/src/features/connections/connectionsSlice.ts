@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "@/api/axios";
-import type { DisplayUser } from "@/types/user";
+import api from "../../api/axios";
+import type { DisplayUser } from "../../types/user";
 
 interface ConnectionsState {
   connections: DisplayUser[];

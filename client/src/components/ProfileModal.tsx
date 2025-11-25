@@ -4,9 +4,9 @@ import { useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
-import { updateUser } from "@/features/user/userSlice";
-import type { RootState } from "@/types/store";
-import { useAppDispatch } from "@/app/useAppDispatch";
+import { updateUser } from "../features/user/userSlice";
+import type { RootState } from "../types/store";
+import { useAppDispatch } from "../app/useAppDispatch";
 
 interface Props {
   setShowEdit: (open: boolean) => void;

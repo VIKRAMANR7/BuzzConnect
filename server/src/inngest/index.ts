@@ -1,10 +1,10 @@
 import { Inngest } from "inngest";
-import sendEmail from "@/configs/nodeMailer.js";
-import Connection from "@/models/Connection.js";
-import Message from "@/models/Message.js";
-import Story from "@/models/Story.js";
-import User from "@/models/User.js";
-import Post from "@/models/Post.js";
+import sendEmail from "../configs/nodeMailer.js";
+import Connection from "../models/Connection.js";
+import Message from "../models/Message.js";
+import Story from "../models/Story.js";
+import User from "../models/User.js";
+import Post from "../models/Post.js";
 
 export const inngest = new Inngest({ id: "buzzconnect-app" });
 

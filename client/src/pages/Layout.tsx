@@ -2,9 +2,9 @@ import { Menu, X } from "lucide-react";
 import { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import Loading from "@/components/Loading";
-import Sidebar from "@/components/Sidebar";
-import type { RootState } from "@/types/store";
+import Loading from "../components/Loading";
+import Sidebar from "../components/Sidebar";
+import type { RootState } from "../types/store";
 
 export default function Layout() {
   const user = useSelector((state: RootState) => state.user.value);

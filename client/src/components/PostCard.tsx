@@ -6,9 +6,9 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import api from "@/api/axios";
-import type { RootState } from "@/types/store";
-import type { Post } from "@/types/post";
+import api from "../api/axios";
+import type { RootState } from "../types/store";
+import type { Post } from "../types/post";
 
 interface Props {
   post: Post;

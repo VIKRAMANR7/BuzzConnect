@@ -3,8 +3,8 @@ import { ArrowLeft, Sparkle, TextIcon, Upload } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import api from "@/api/axios";
-import type { StoryModalProps } from "@/types/story-modal";
+import api from "../api/axios";
+import type { StoryModalProps } from "../types/story-modal";
 
 export default function StoryModal({ setShowModal, fetchStories }: StoryModalProps) {
   const bgColors = ["#4f46e5", "#7c3aed", "#db2777", "#e11d48", "#ca8a04", "#0d9488"];

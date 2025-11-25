@@ -2,14 +2,14 @@ import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 
-import api from "@/api/axios";
-import { assets } from "@/assets/assets";
-import Loading from "@/components/Loading";
-import PostCard from "@/components/PostCard";
-import RecentMessages from "@/components/RecentMessages";
-import StoriesBar from "@/components/StoriesBar";
+import api from "../api/axios";
+import { assets } from "../assets/assets";
+import Loading from "../components/Loading";
+import PostCard from "../components/PostCard";
+import RecentMessages from "../components/RecentMessages";
+import StoriesBar from "../components/StoriesBar";
 
-import type { Post } from "@/types/post";
+import type { Post } from "../types/post";
 
 export default function Feed() {
   const { getToken } = useAuth();

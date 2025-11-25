@@ -5,12 +5,12 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import api from "@/api/axios";
-import { addMessage, fetchMessages, resetMessages } from "@/features/messages/messagesSlice";
-import type { RootState } from "@/types/store";
-import type { DisplayUser } from "@/types/user";
-import { useAppDispatch } from "@/app/useAppDispatch";
-import type { ChatMessage } from "@/types/message";
+import api from "../api/axios";
+import { addMessage, fetchMessages, resetMessages } from "../features/messages/messagesSlice";
+import type { RootState } from "../types/store";
+import type { DisplayUser } from "../types/user";
+import { useAppDispatch } from "../app/useAppDispatch";
+import type { ChatMessage } from "../types/message";
 
 export default function ChatBox() {
   const dispatch = useAppDispatch();

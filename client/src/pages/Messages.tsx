@@ -2,8 +2,8 @@ import { Eye, MessageSquare } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import type { RootState } from "@/types/store";
-import type { SimpleUser } from "@/types/user";
+import type { RootState } from "../types/store";
+import type { SimpleUser } from "../types/user";
 
 export default function Messages() {
   const navigate = useNavigate();

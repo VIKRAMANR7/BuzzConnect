@@ -3,22 +3,22 @@ import { useEffect, useRef, useCallback } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Route, Routes, useLocation } from "react-router-dom";
 
-import Notification from "@/components/Notification";
-import { fetchConnections } from "@/features/connections/connectionsSlice";
-import { addMessage } from "@/features/messages/messagesSlice";
-import { fetchUser } from "@/features/user/userSlice";
+import Notification from "./components/Notification";
+import { fetchConnections } from "./features/connections/connectionsSlice";
+import { addMessage } from "./features/messages/messagesSlice";
+import { fetchUser } from "./features/user/userSlice";
 
-import ChatBox from "@/pages/ChatBox";
-import Connections from "@/pages/Connections";
-import CreatePost from "@/pages/CreatePost";
-import Discover from "@/pages/Discover";
-import Feed from "@/pages/Feed";
-import Layout from "@/pages/Layout";
-import Login from "@/pages/Login";
-import Messages from "@/pages/Messages";
-import Profile from "@/pages/Profile";
+import ChatBox from "./pages/ChatBox";
+import Connections from "./pages/Connections";
+import CreatePost from "./pages/CreatePost";
+import Discover from "./pages/Discover";
+import Feed from "./pages/Feed";
+import Layout from "./pages/Layout";
+import Login from "./pages/Login";
+import Messages from "./pages/Messages";
+import Profile from "./pages/Profile";
 
-import { useAppDispatch } from "@/app/useAppDispatch";
+import { useAppDispatch } from "./app/useAppDispatch";
 
 export default function App() {
   const { user } = useUser();

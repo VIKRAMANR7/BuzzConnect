@@ -1,22 +1,15 @@
-import js from "@eslint/js";
-import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import { defineConfig, globalIgnores } from "eslint/config";
 import tsParser from "@typescript-eslint/parser";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
+import reactHooks from "eslint-plugin-react-hooks";
+import globals from "globals";
 
-export default defineConfig([
-  globalIgnores(["dist", "node_modules"]),
+export default [
+  {
+    ignores: ["dist/**", "node_modules/**", "**/*.d.ts"],
+  },
 
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
-
-    extends: [
-      js.configs.recommended,
-      reactHooks.configs["recommended-latest"],
-      reactRefresh.configs.vite,
-    ],
+    files: ["src/**/*.{ts,tsx}"],
 
     languageOptions: {
       parser: tsParser,
@@ -33,21 +26,17 @@ export default defineConfig([
 
     plugins: {
       "@typescript-eslint": tsPlugin,
+      "react-hooks": reactHooks,
     },
 
     rules: {
-      // keep TS simple — avoid complicated strict rules
       "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-explicit-any": "off",
 
-      // React hooks validation
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
 
-      // prevent conflict with TS rule
-      "no-unused-vars": "off",
-
-      // Needed for React 19 automatic JSX transform
       "no-undef": "off",
     },
   },
-]);
+];

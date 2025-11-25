@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
-import api from "@/api/axios";
+import api from "../api/axios";
 
 interface RecentMessage {
   _id: string;

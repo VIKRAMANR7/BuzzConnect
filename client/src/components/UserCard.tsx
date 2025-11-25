@@ -5,11 +5,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 
-import api from "@/api/axios";
-import { fetchUser } from "@/features/user/userSlice";
-import type { RootState } from "@/types/store";
-import type { DisplayUser } from "@/types/user";
-import { useAppDispatch } from "@/app/useAppDispatch";
+import api from "../api/axios";
+import { fetchUser } from "../features/user/userSlice";
+import type { RootState } from "../types/store";
+import type { DisplayUser } from "../types/user";
+import { useAppDispatch } from "../app/useAppDispatch";
 
 interface Props {
   user: DisplayUser;

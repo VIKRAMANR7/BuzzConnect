@@ -1,6 +1,6 @@
 import { Calendar, MapPin, PenBox, Verified } from "lucide-react";
 import moment from "moment";
-import type { DisplayUser } from "@/types/user";
+import type { DisplayUser } from "../types/user";
 
 interface Props {
   user: DisplayUser;

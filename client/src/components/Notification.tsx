@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { ChatMessage } from "@/types/message";
+import type { ChatMessage } from "../types/message";
 
 interface Props {
   message: ChatMessage;

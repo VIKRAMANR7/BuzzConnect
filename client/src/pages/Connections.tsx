@@ -5,11 +5,11 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import api from "@/api/axios";
-import { fetchConnections } from "@/features/connections/connectionsSlice";
-import type { RootState } from "@/types/store";
-import type { DisplayUser } from "@/types/user";
-import { useAppDispatch } from "@/app/useAppDispatch";
+import api from "../api/axios";
+import { fetchConnections } from "../features/connections/connectionsSlice";
+import type { RootState } from "../types/store";
+import type { DisplayUser } from "../types/user";
+import { useAppDispatch } from "../app/useAppDispatch";
 
 export default function Connections() {
   const navigate = useNavigate();
