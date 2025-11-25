@@ -1082,34 +1082,9 @@ pnpm typecheck
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Coding Standards
-
-- Follow ESLint and Prettier configurations
-- Write meaningful commit messages
-- Add comments for complex logic
-- Update documentation for new features
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 👨‍💻 Author
 
-**Your Name**
+**Vikraman R**
 
 - GitHub: [@VIKRAMANR7](https://github.com/VIKRAMANR7)
 
@@ -1124,12 +1099,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ImageKit](https://imagekit.io/)
 - [Inngest](https://www.inngest.com/)
 - [TailwindCSS](https://tailwindcss.com/)
-
----
-
-## 📞 Support
-
-For support, email support@buzzconnect.com or join our Slack channel.
 
 ---
 
