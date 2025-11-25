@@ -23,7 +23,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://buzz-connect-server.vercel.app"],
+    origin: ["http://localhost:5173", "https://buzzconnect.vercel.app"],
     credentials: true,
   })
 );

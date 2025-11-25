@@ -98,7 +98,7 @@
 
 ## 🌐 Live Demo
 
-- **Frontend:** [https://buzz-connect.vercel.app](https://buzz-connect.vercel.app)
+- **Frontend:** [https://buzzconnect.vercel.app](https://buzzconnect.vercel.app)
 - **Backend API:** [https://buzz-connect-server.vercel.app](https://buzzconnect-server.vercel.app)
 
 ---
