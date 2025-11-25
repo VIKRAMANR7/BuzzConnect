@@ -2,7 +2,7 @@
   "name": "buzzconnect-client",
   "private": true,
   "version": "1.0.0",
-  "description": "Frontend for BuzzConnect — React 19, Clerk authentication, Redux Toolkit, TailwindCSS, Vite.",
+  "description": "BuzzConnect Client is a modern, high-performance social media frontend built with React 19, Redux Toolkit, Clerk Authentication, and Vite. It delivers a fast, app-like experience with interactive features such as real-time messaging (SSE), story creation, post browsing, connections, profile management, and a clean, mobile-responsive UI powered by TailwindCSS.",
   "type": "module",
   "scripts": {
     "dev": "vite",
