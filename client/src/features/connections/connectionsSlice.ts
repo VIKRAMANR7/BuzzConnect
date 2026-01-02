@@ -26,10 +26,10 @@ export const fetchConnections = createAsyncThunk(
     if (!data.success) return null;
 
     return {
-      connections: data.connections as DisplayUser[],
-      pendingConnections: data.pendingConnections as DisplayUser[],
-      followers: data.followers as DisplayUser[],
-      following: data.following as DisplayUser[],
+      connections: data.connections,
+      pendingConnections: data.pendingConnections,
+      followers: data.followers,
+      following: data.following,
     };
   }
 );

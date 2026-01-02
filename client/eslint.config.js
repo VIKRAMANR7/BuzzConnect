@@ -5,7 +5,7 @@ import globals from "globals";
 
 export default [
   {
-    ignores: ["dist/**", "node_modules/**", "**/*.d.ts"],
+    ignores: ["dist/**", "node_modules/**"],
   },
 
   {
@@ -30,13 +30,14 @@ export default [
     },
 
     rules: {
-      "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-explicit-any": "error",
 
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
 
-      "no-undef": "off",
+      "no-var": "error",
+      "prefer-const": "error",
     },
   },
 ];

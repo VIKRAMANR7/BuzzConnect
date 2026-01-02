@@ -11,11 +11,11 @@ import type { RootState } from "../types/store";
 import type { DisplayUser } from "../types/user";
 import { useAppDispatch } from "../app/useAppDispatch";
 
-interface Props {
+interface UserCardProps {
   user: DisplayUser;
 }
 
-export default function UserCard({ user }: Props) {
+export default function UserCard({ user }: UserCardProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { getToken } = useAuth();
@@ -23,27 +23,23 @@ export default function UserCard({ user }: Props) {
   const currentUser = useSelector((state: RootState) => state.user.value);
 
   const handleFollow = useCallback(async () => {
-    try {
-      const token = await getToken();
-      if (!token) {
-        toast.error("Not authenticated");
-        return;
-      }
+    const token = await getToken();
+    if (!token) {
+      toast.error("Not authenticated");
+      return;
+    }
 
-      const { data } = await api.post(
-        "/api/user/follow",
-        { id: user._id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+    const { data } = await api.post(
+      "/api/user/follow",
+      { id: user._id },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      if (data.success) {
-        toast.success(data.message);
-        dispatch(fetchUser(token));
-      } else {
-        toast.error(data.message);
-      }
-    } catch {
-      toast.error("Unable to follow user");
+    if (data.success) {
+      toast.success(data.message);
+      dispatch(fetchUser(token));
+    } else {
+      toast.error(data.message);
     }
   }, [getToken, user._id, dispatch]);
 
@@ -53,23 +49,19 @@ export default function UserCard({ user }: Props) {
       return;
     }
 
-    try {
-      const token = await getToken();
-      if (!token) {
-        toast.error("Not authenticated");
-        return;
-      }
-
-      const { data } = await api.post(
-        "/api/user/connect",
-        { id: user._id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      data.success ? toast.success(data.message) : toast.error(data.message);
-    } catch {
-      toast.error("Unable to send connection request");
+    const token = await getToken();
+    if (!token) {
+      toast.error("Not authenticated");
+      return;
     }
+
+    const { data } = await api.post(
+      "/api/user/connect",
+      { id: user._id },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    data.success ? toast.success(data.message) : toast.error(data.message);
   }, [getToken, user._id, currentUser, navigate]);
 
   const isFollowing = Boolean(currentUser?.following.includes(user._id));

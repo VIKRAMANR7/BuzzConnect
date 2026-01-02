@@ -121,16 +121,10 @@ const sendNewConnectionRequestReminder = inngest.createFunction(
       const c = await load();
       if (!c) return;
 
-      const subject = "👋 New Connection Request";
-      const body = `
-        Hi ${c.to.full_name},
-        You have a new connection request from ${c.from.full_name} (@${c.from.username}).
-      `;
-
       await sendEmail({
         to: c.to.email,
-        subject,
-        body,
+        subject: "New Connection Request",
+        body: `Hi ${c.to.full_name}, You have a new connection request from ${c.from.full_name} (@${c.from.username}).`,
       });
     });
 
@@ -145,16 +139,10 @@ const sendNewConnectionRequestReminder = inngest.createFunction(
         return { message: "Already accepted" };
       }
 
-      const subject = "⏳ Reminder: Pending Connection Request";
-      const body = `
-        Hi ${c.to.full_name},
-        You still have a pending connection request from ${c.from.full_name} (@${c.from.username}).
-      `;
-
       await sendEmail({
         to: c.to.email,
-        subject,
-        body,
+        subject: "Reminder: Pending Connection Request",
+        body: `Hi ${c.to.full_name}, You still have a pending connection request from ${c.from.full_name} (@${c.from.username}).`,
       });
 
       return { message: "Reminder sent" };
@@ -202,16 +190,10 @@ const sendNotificationOfUnseenMessages = inngest.createFunction(
       const user = await User.findById(userId);
       if (!user) continue;
 
-      const subject = `✉️ You have ${counts[userId]} unseen messages`;
-      const body = `
-        Hi ${user.full_name},
-        You have ${counts[userId]} unread messages waiting for you.
-      `;
-
       await sendEmail({
         to: user.email,
-        subject,
-        body,
+        subject: `You have ${counts[userId]} unseen messages`,
+        body: `Hi ${user.full_name}, You have ${counts[userId]} unread messages waiting for you.`,
       });
     }
 

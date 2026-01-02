@@ -18,19 +18,15 @@ export default function StoriesBar() {
   const [viewStory, setViewStory] = useState<Story | null>(null);
 
   const fetchStories = useCallback(async () => {
-    try {
-      const token = await getToken();
-      const { data } = await api.get("/api/story/get", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const token = await getToken();
+    const { data } = await api.get("/api/story/get", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      if (data.success) {
-        setStories(data.stories);
-      } else {
-        toast.error(data.message);
-      }
-    } catch {
-      toast.error("Unable to load stories");
+    if (data.success) {
+      setStories(data.stories);
+    } else {
+      toast.error(data.message);
     }
   }, [getToken]);
 
@@ -41,7 +37,6 @@ export default function StoriesBar() {
   return (
     <div className="w-screen sm:w-[calc(100vw-240px)] lg:max-w-2xl no-scrollbar overflow-x-auto px-4">
       <div className="flex gap-4 pb-5">
-        {/* Create Story */}
         <div
           onClick={() => setShowModal(true)}
           className="rounded-lg shadow-sm min-w-30 max-w-30 max-h-40 aspect-3/4 cursor-pointer hover:shadow-lg transition-all duration-200 border-2 border-dashed border-indigo-300 bg-linear-to-b from-indigo-50 to-white"
@@ -54,7 +49,6 @@ export default function StoriesBar() {
           </div>
         </div>
 
-        {/* Existing Stories */}
         {stories.map((story) => (
           <div
             key={story._id}
@@ -95,7 +89,6 @@ export default function StoriesBar() {
         ))}
       </div>
 
-      {/* Modals */}
       {showModal && <StoryModal setShowModal={setShowModal} fetchStories={fetchStories} />}
       {viewStory && <StoryViewer viewStory={viewStory} setViewStory={setViewStory} />}
     </div>

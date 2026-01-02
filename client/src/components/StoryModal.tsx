@@ -6,19 +6,18 @@ import toast from "react-hot-toast";
 import api from "../api/axios";
 import type { StoryModalProps } from "../types/story-modal";
 
+const BG_COLORS = ["#4f46e5", "#7c3aed", "#db2777", "#e11d48", "#ca8a04", "#0d9488"];
+const MAX_VIDEO_DURATION = 60;
+const MAX_VIDEO_SIZE_MB = 50;
+
 export default function StoryModal({ setShowModal, fetchStories }: StoryModalProps) {
-  const bgColors = ["#4f46e5", "#7c3aed", "#db2777", "#e11d48", "#ca8a04", "#0d9488"];
+  const { getToken } = useAuth();
 
   const [mode, setMode] = useState<"text" | "media">("text");
-  const [background, setBackground] = useState(bgColors[0]);
+  const [background, setBackground] = useState(BG_COLORS[0]);
   const [text, setText] = useState("");
   const [media, setMedia] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  const { getToken } = useAuth();
-
-  const MAX_VIDEO_DURATION = 60;
-  const MAX_VIDEO_SIZE_MB = 50;
 
   const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -32,7 +31,6 @@ export default function StoryModal({ setShowModal, fetchStories }: StoryModalPro
         return;
       }
 
-      // Validate duration
       const video = document.createElement("video");
       video.preload = "metadata";
       video.src = URL.createObjectURL(file);
@@ -79,29 +77,24 @@ export default function StoryModal({ setShowModal, fetchStories }: StoryModalPro
       formData.append("media", media);
     }
 
-    try {
-      const token = await getToken();
+    const token = await getToken();
 
-      const { data } = await api.post("/api/story/create", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const { data } = await api.post("/api/story/create", formData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      if (data.success) {
-        toast.success("Story created successfully");
-        setShowModal(false);
-        fetchStories();
-      } else {
-        toast.error(data.message);
-      }
-    } catch {
-      toast.error("Something went wrong");
+    if (data.success) {
+      toast.success("Story created successfully");
+      setShowModal(false);
+      fetchStories();
+    } else {
+      toast.error(data.message);
     }
   };
 
   return (
     <div className="fixed inset-0 z-110 min-h-screen bg-black/80 backdrop-blur text-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Header */}
         <div className="text-center mb-4 flex items-center justify-between">
           <button onClick={() => setShowModal(false)} className="text-white p-2 cursor-pointer">
             <ArrowLeft />
@@ -110,7 +103,6 @@ export default function StoryModal({ setShowModal, fetchStories }: StoryModalPro
           <span className="w-10" />
         </div>
 
-        {/* Story Preview */}
         <div
           className="rounded-lg h-96 flex items-center justify-center relative"
           style={{ backgroundColor: background }}
@@ -135,9 +127,8 @@ export default function StoryModal({ setShowModal, fetchStories }: StoryModalPro
           )}
         </div>
 
-        {/* Background Colors */}
         <div className="flex mt-4 gap-2">
-          {bgColors.map((color) => (
+          {BG_COLORS.map((color) => (
             <button
               key={color}
               onClick={() => setBackground(color)}
@@ -147,7 +138,6 @@ export default function StoryModal({ setShowModal, fetchStories }: StoryModalPro
           ))}
         </div>
 
-        {/* Mode Switch */}
         <div className="flex gap-2 mt-4">
           <button
             onClick={() => {
@@ -177,7 +167,6 @@ export default function StoryModal({ setShowModal, fetchStories }: StoryModalPro
           </label>
         </div>
 
-        {/* Submit */}
         <button
           onClick={() =>
             toast.promise(handleCreateStory(), {

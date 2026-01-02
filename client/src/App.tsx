@@ -20,6 +20,8 @@ import Profile from "./pages/Profile";
 
 import { useAppDispatch } from "./app/useAppDispatch";
 
+const baseURL = import.meta.env.VITE_BASE_URL;
+
 export default function App() {
   const { user } = useUser();
   const { getToken } = useAuth();
@@ -27,8 +29,6 @@ export default function App() {
 
   const dispatch = useAppDispatch();
   const pathnameRef = useRef(pathname);
-
-  const baseURL = import.meta.env.VITE_BASE_URL;
 
   useEffect(() => {
     pathnameRef.current = pathname;
@@ -65,7 +65,7 @@ export default function App() {
           });
         }
       } catch {
-        console.error("Error parsing SSE message");
+        /* SSE parse error - ignore */
       }
     },
     [dispatch]
@@ -78,7 +78,7 @@ export default function App() {
     eventSource.onmessage = handleSSEMessage;
 
     return () => eventSource.close();
-  }, [user, baseURL, handleSSEMessage]);
+  }, [user, handleSSEMessage]);
 
   return (
     <>

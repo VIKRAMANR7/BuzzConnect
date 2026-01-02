@@ -19,7 +19,7 @@ export const fetchMessages = createAsyncThunk(
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    return data.success ? (data.messages as ChatMessage[]) : null;
+    return data.success ? data.messages : null;
   }
 );
 

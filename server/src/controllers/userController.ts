@@ -8,7 +8,6 @@ import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 import { getAuthUserId } from "../utils/getAuthUserId.js";
-
 import { asyncHandler } from "../middleware/asyncHandler.js";
 
 export const getUserData = asyncHandler(async (req: Request, res: Response) => {
@@ -33,7 +32,6 @@ export const updateUserData = asyncHandler(async (req: Request, res: Response) =
     return res.json({ success: false, message: "User not found" });
   }
 
-  // Username validation
   if (!username) {
     username = existingUser.username;
   }
@@ -52,7 +50,6 @@ export const updateUserData = asyncHandler(async (req: Request, res: Response) =
     full_name,
   };
 
-  // Handle file uploads
   const files = req.files as Record<string, Express.Multer.File[]> | undefined;
 
   const profile = files?.profile?.[0];
@@ -170,8 +167,7 @@ export const sendConnectionRequest = asyncHandler(async (req: Request, res: Resp
   if (recentRequests.length >= 20) {
     return res.json({
       success: false,
-      message:
-        "You have sent too many connection requests in the last 24 hours. Please try again later.",
+      message: "Too many connection requests in 24 hours. Please try again later.",
     });
   }
 

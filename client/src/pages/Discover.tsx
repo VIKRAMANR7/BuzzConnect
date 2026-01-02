@@ -23,28 +23,24 @@ export default function Discover() {
     async (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key !== "Enter") return;
 
-      try {
-        setLoading(true);
-        setUsers([]);
+      setLoading(true);
+      setUsers([]);
 
-        const token = await getToken();
-        const { data } = await api.post(
-          "/api/user/discover",
-          { input },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+      const token = await getToken();
+      const { data } = await api.post(
+        "/api/user/discover",
+        { input },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        if (data.success) {
-          setUsers(data.users);
-        } else {
-          toast.error(data.message);
-        }
-      } catch {
-        toast.error("Unable to search users");
-      } finally {
-        setLoading(false);
-        setInput("");
+      if (data.success) {
+        setUsers(data.users);
+      } else {
+        toast.error(data.message);
       }
+
+      setLoading(false);
+      setInput("");
     },
     [input, getToken]
   );
@@ -61,7 +57,6 @@ export default function Discover() {
         <h1 className="text-3xl font-bold text-slate-900 mb-2">Discover People</h1>
         <p className="text-slate-600">Connect with amazing people and grow your network</p>
 
-        {/* Search Bar */}
         <div className="mt-8 mb-8 shadow-md rounded-md border border-slate-200/60 bg-white/80">
           <div className="p-6">
             <div className="relative">
@@ -78,7 +73,6 @@ export default function Discover() {
           </div>
         </div>
 
-        {/* Users List */}
         <div className="flex flex-wrap gap-6">
           {users.map((user) => (
             <UserCard key={user._id} user={user} />

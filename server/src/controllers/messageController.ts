@@ -58,10 +58,8 @@ export function sseController(req: Request, res: Response) {
 
   addConnection(userId, res);
 
-  // Notify client about the connection
   sendSSE(res, { connected: true, time: Date.now() }, "system");
 
-  // Heartbeat ping to keep connection alive
   const heartbeat = setInterval(() => {
     res.write(`event: ping\ndata: ${Date.now()}\n\n`);
   }, 15000);
@@ -108,10 +106,8 @@ export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
     message_type,
   });
 
-  // Send API response
   res.json({ success: true, message });
 
-  // Send via SSE (real-time)
   const populated = await Message.findById(message._id).populate("from_user_id");
   broadcastToUser(to_user_id, populated, "message");
 });
@@ -127,7 +123,6 @@ export const getChatMessages = asyncHandler(async (req: Request, res: Response) 
     ],
   }).sort({ createdAt: -1 });
 
-  // Mark received messages as seen
   await Message.updateMany({ from_user_id: to_user_id, to_user_id: userId }, { seen: true });
 
   res.json({ success: true, messages });

@@ -1,6 +1,6 @@
 import type { Request } from "express";
 
-export async function getAuthUserId(req: Request): Promise<string> {
+export async function getAuthUserId(req: Request) {
   const authFn = req.auth;
 
   if (!authFn) {

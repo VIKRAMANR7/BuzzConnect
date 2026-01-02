@@ -22,14 +22,11 @@ export default [
     },
 
     rules: {
-      // TypeScript quality rules
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
 
-      // Prettier formatting enforcement
       "prettier/prettier": "error",
 
-      "no-console": "off",
       "no-var": "error",
       "prefer-const": "error",
     },

@@ -1,15 +1,21 @@
 import { Calendar, MapPin, PenBox, Verified } from "lucide-react";
 import moment from "moment";
 import type { DisplayUser } from "../types/user";
+import type { Post } from "../types/post";
 
-interface Props {
+interface UserProfileInfoProps {
   user: DisplayUser;
-  posts: unknown[];
+  posts: Post[];
   profileId?: string;
   setShowEdit: (value: boolean) => void;
 }
 
-export default function UserProfileInfo({ user, posts, profileId, setShowEdit }: Props) {
+export default function UserProfileInfo({
+  user,
+  posts,
+  profileId,
+  setShowEdit,
+}: UserProfileInfoProps) {
   return (
     <div className="relative py-4 px-6 md:px-8 bg-white">
       <div className="flex flex-col md:flex-row items-start gap-6">
@@ -56,7 +62,6 @@ export default function UserProfileInfo({ user, posts, profileId, setShowEdit }:
             </span>
           </div>
 
-          {/* Stats */}
           <div className="flex items-center gap-6 mt-6 border-t border-gray-200 pt-4">
             <div>
               <span className="sm:text-xl font-bold text-gray-900">{posts.length}</span>

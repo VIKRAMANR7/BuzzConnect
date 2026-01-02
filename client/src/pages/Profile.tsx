@@ -13,15 +13,7 @@ import UserProfileInfo from "../components/UserProfileInfo";
 
 import type { RootState } from "../types/store";
 import type { DisplayUser } from "../types/user";
-
-interface Post {
-  _id: string;
-  content: string;
-  image_urls: string[];
-  createdAt: string;
-  likes_count: string[];
-  user: DisplayUser;
-}
+import type { Post } from "../types/post";
 
 export default function Profile() {
   const currentUser = useSelector((state: RootState) => state.user.value);
@@ -36,22 +28,18 @@ export default function Profile() {
 
   const fetchUser = useCallback(
     async (id: string) => {
-      try {
-        const token = await getToken();
-        const { data } = await api.post(
-          "/api/user/profiles",
-          { profileId: id },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+      const token = await getToken();
+      const { data } = await api.post(
+        "/api/user/profiles",
+        { profileId: id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-        if (data.success) {
-          setUser(data.profile);
-          setPosts(data.posts);
-        } else {
-          toast.error(data.message);
-        }
-      } catch {
-        toast.error("Failed to load profile");
+      if (data.success) {
+        setUser(data.profile);
+        setPosts(data.posts);
+      } else {
+        toast.error(data.message);
       }
     },
     [getToken]
@@ -67,16 +55,13 @@ export default function Profile() {
   return (
     <div className="relative h-full overflow-y-scroll bg-gray-50 p-6">
       <div className="max-w-3xl mx-auto">
-        {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow overflow-hidden">
-          {/* Cover */}
           <div className="h-40 md:h-56 bg-linear-to-r from-indigo-200 via-purple-200 to-pink-200">
             {user.cover_photo && (
               <img src={user.cover_photo} className="w-full h-full object-cover" />
             )}
           </div>
 
-          {/* Info */}
           <UserProfileInfo
             user={user}
             posts={posts}
@@ -85,7 +70,6 @@ export default function Profile() {
           />
         </div>
 
-        {/* Tabs */}
         <div className="mt-6">
           <div className="bg-white rounded-xl shadow p-1 flex max-w-md mx-auto">
             {["posts", "media", "likes"].map((tab) => {
@@ -106,7 +90,6 @@ export default function Profile() {
             })}
           </div>
 
-          {/* Posts */}
           {activeTab === "posts" && (
             <div>
               {posts.map((post) => (
@@ -115,7 +98,6 @@ export default function Profile() {
             </div>
           )}
 
-          {/* Media */}
           {activeTab === "media" && (
             <div className="flex flex-wrap mt-6 max-w-6xl">
               {posts

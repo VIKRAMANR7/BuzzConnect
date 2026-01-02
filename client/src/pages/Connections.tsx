@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { fetchConnections } from "../features/connections/connectionsSlice";
 import type { RootState } from "../types/store";
-import type { DisplayUser } from "../types/user";
 import { useAppDispatch } from "../app/useAppDispatch";
 
 export default function Connections() {
@@ -22,64 +21,51 @@ export default function Connections() {
     (s: RootState) => s.connections
   );
 
-  // Reload connections
   const reloadConnections = useCallback(async () => {
     const token = await getToken();
     if (token) dispatch(fetchConnections(token));
   }, [dispatch, getToken]);
 
-  // Unfollow a user
   const handleUnfollow = useCallback(
     async (userId: string) => {
-      try {
-        const token = await getToken();
-        if (!token) return;
-        const { data } = await api.post(
-          "/api/user/unfollow",
-          { id: userId },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        data.success ? toast.success(data.message) : toast.error(data.message);
-        await reloadConnections();
-      } catch {
-        toast.error("Unable to unfollow user");
-      }
+      const token = await getToken();
+      if (!token) return;
+      const { data } = await api.post(
+        "/api/user/unfollow",
+        { id: userId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      data.success ? toast.success(data.message) : toast.error(data.message);
+      await reloadConnections();
     },
     [getToken, reloadConnections]
   );
 
-  // Accept connection request
   const acceptConnection = useCallback(
     async (userId: string) => {
-      try {
-        const token = await getToken();
-        if (!token) return;
-        const { data } = await api.post(
-          "/api/user/accept",
-          { id: userId },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        data.success ? toast.success(data.message) : toast.error(data.message);
-        await reloadConnections();
-      } catch {
-        toast.error("Unable to accept connection");
-      }
+      const token = await getToken();
+      if (!token) return;
+      const { data } = await api.post(
+        "/api/user/accept",
+        { id: userId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      data.success ? toast.success(data.message) : toast.error(data.message);
+      await reloadConnections();
     },
     [getToken, reloadConnections]
   );
 
-  // load on mount
   useEffect(() => {
     reloadConnections();
   }, [reloadConnections]);
 
-  // tabs memoized to avoid re-creating array on each render (helpful if passed down)
   const tabs = useMemo(
     () => [
-      { label: "Followers", value: followers as DisplayUser[], icon: Users },
-      { label: "Following", value: following as DisplayUser[], icon: UserCheck },
-      { label: "Pending", value: pendingConnections as DisplayUser[], icon: UserRoundPen },
-      { label: "Connections", value: connections as DisplayUser[], icon: UserPlus },
+      { label: "Followers", value: followers, icon: Users },
+      { label: "Following", value: following, icon: UserCheck },
+      { label: "Pending", value: pendingConnections, icon: UserRoundPen },
+      { label: "Connections", value: connections, icon: UserPlus },
     ],
     [followers, following, pendingConnections, connections]
   );
@@ -94,7 +80,6 @@ export default function Connections() {
           <p className="text-slate-600">Manage your network and discover new connections</p>
         </div>
 
-        {/* Counts */}
         <div className="mb-8 flex flex-wrap gap-6">
           {tabs.map((tab) => (
             <div
@@ -107,7 +92,6 @@ export default function Connections() {
           ))}
         </div>
 
-        {/* Tabs */}
         <div className="inline-flex flex-wrap items-center border border-gray-200 rounded-md p-1 bg-white shadow-sm">
           {tabs.map((tab) => (
             <button
@@ -125,7 +109,6 @@ export default function Connections() {
           ))}
         </div>
 
-        {/* Users */}
         <div className="flex flex-wrap gap-6 mt-6">
           {activeTab.value.map((user) => (
             <div

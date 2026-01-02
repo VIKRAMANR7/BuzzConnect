@@ -10,14 +10,13 @@ import { addMessage, fetchMessages, resetMessages } from "../features/messages/m
 import type { RootState } from "../types/store";
 import type { DisplayUser } from "../types/user";
 import { useAppDispatch } from "../app/useAppDispatch";
-import type { ChatMessage } from "../types/message";
 
 export default function ChatBox() {
   const dispatch = useAppDispatch();
   const { getToken } = useAuth();
   const { userId } = useParams<{ userId?: string }>();
 
-  const messages = useSelector((s: RootState) => s.messages.messages) as ChatMessage[];
+  const messages = useSelector((s: RootState) => s.messages.messages);
   const connections = useSelector((s: RootState) => s.connections.connections);
 
   const [text, setText] = useState("");
@@ -26,50 +25,38 @@ export default function ChatBox() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // load messages for this chat
   const loadMessages = useCallback(async () => {
     if (!userId) return;
-    try {
-      const token = await getToken();
-      if (!token) return;
-      // dispatch typed with useAppDispatch so this is allowed
-      dispatch(fetchMessages({ token, userId }));
-    } catch {
-      toast.error("Unable to load messages");
-    }
+    const token = await getToken();
+    if (!token) return;
+    dispatch(fetchMessages({ token, userId }));
   }, [userId, getToken, dispatch]);
 
-  // send message (text or image)
   const sendMessage = useCallback(async () => {
     if (!userId) return;
     if (!text.trim() && !image) return;
 
-    try {
-      const token = await getToken();
-      if (!token) return;
+    const token = await getToken();
+    if (!token) return;
 
-      const form = new FormData();
-      form.append("to_user_id", userId);
-      form.append("text", text);
-      if (image) form.append("image", image);
+    const form = new FormData();
+    form.append("to_user_id", userId);
+    form.append("text", text);
+    if (image) form.append("image", image);
 
-      const { data } = await api.post("/api/message/send", form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const { data } = await api.post("/api/message/send", form, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      if (data.success) {
-        setText("");
-        setImage(null);
-        dispatch(addMessage(data.message));
-      } else {
-        toast.error(data.message);
-      }
-    } catch {
-      toast.error("Unable to send message");
+    if (data.success) {
+      setText("");
+      setImage(null);
+      dispatch(addMessage(data.message));
+    } else {
+      toast.error(data.message);
     }
   }, [userId, text, image, getToken, dispatch]);
 
-  // effect: load messages when userId changes
   useEffect(() => {
     loadMessages();
     return () => {
@@ -77,18 +64,15 @@ export default function ChatBox() {
     };
   }, [loadMessages, dispatch]);
 
-  // derive the other user from connections list
   useEffect(() => {
     const found = connections.find((c) => c._id === userId) || null;
     setOtherUser(found ?? null);
   }, [connections, userId]);
 
-  // scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // memoized sorted messages
   const sortedMessages = useMemo(() => {
     return [...messages].sort(
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
@@ -99,7 +83,6 @@ export default function ChatBox() {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Header */}
       <div className="flex items-center gap-2 p-2 md:px-10 xl:pl-42 bg-linear-to-r from-indigo-50 to-purple-50 border-b border-gray-300">
         <img src={otherUser.profile_picture} className="size-8 rounded-full" alt="" />
         <div>
@@ -108,12 +91,9 @@ export default function ChatBox() {
         </div>
       </div>
 
-      {/* Messages */}
       <div className="p-5 md:px-10 h-full overflow-y-scroll">
         <div className="space-y-4 max-w-4xl mx-auto">
           {sortedMessages.map((message, index) => {
-            // message.to_user_id is the recipient id in your backend schema,
-            // determine whether the message was sent by current user by comparing to otherUser._id
             const isSentByMe = message.to_user_id !== otherUser._id;
 
             return (
@@ -142,7 +122,6 @@ export default function ChatBox() {
         </div>
       </div>
 
-      {/* Input */}
       <div className="px-4">
         <div className="flex items-center gap-3 pl-5 p-1.5 bg-white w-full max-w-xl mx-auto border border-gray-200 rounded-full shadow mb-5">
           <input

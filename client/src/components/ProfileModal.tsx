@@ -8,11 +8,11 @@ import { updateUser } from "../features/user/userSlice";
 import type { RootState } from "../types/store";
 import { useAppDispatch } from "../app/useAppDispatch";
 
-interface Props {
+interface ProfileModalProps {
   setShowEdit: (open: boolean) => void;
 }
 
-export default function ProfileModal({ setShowEdit }: Props) {
+export default function ProfileModal({ setShowEdit }: ProfileModalProps) {
   const dispatch = useAppDispatch();
   const { getToken } = useAuth();
 
@@ -52,7 +52,6 @@ export default function ProfileModal({ setShowEdit }: Props) {
     [editForm, getToken, dispatch, setShowEdit]
   );
 
-  // If user is missing → render nothing (but AFTER hooks).
   if (!user) return null;
 
   return (
@@ -65,7 +64,6 @@ export default function ProfileModal({ setShowEdit }: Props) {
             className="space-y-4"
             onSubmit={(e) => toast.promise(handleSaveProfile(e), { loading: "Saving..." })}
           >
-            {/* Profile Picture */}
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Profile Picture
               <input
@@ -94,7 +92,6 @@ export default function ProfileModal({ setShowEdit }: Props) {
               </div>
             </label>
 
-            {/* Cover Photo */}
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Cover Photo
               <input
@@ -123,7 +120,6 @@ export default function ProfileModal({ setShowEdit }: Props) {
               </div>
             </label>
 
-            {/* Name */}
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Name
               <input
@@ -134,7 +130,6 @@ export default function ProfileModal({ setShowEdit }: Props) {
               />
             </label>
 
-            {/* Username */}
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Username
               <input
@@ -145,7 +140,6 @@ export default function ProfileModal({ setShowEdit }: Props) {
               />
             </label>
 
-            {/* Bio */}
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Bio
               <textarea
@@ -156,7 +150,6 @@ export default function ProfileModal({ setShowEdit }: Props) {
               />
             </label>
 
-            {/* Location */}
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Location
               <input

@@ -3,14 +3,11 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import type { RootState } from "../types/store";
-import type { SimpleUser } from "../types/user";
 
 export default function Messages() {
   const navigate = useNavigate();
 
   const { connections } = useSelector((state: RootState) => state.connections);
-
-  const users = connections as SimpleUser[];
 
   return (
     <div className="min-h-screen relative bg-slate-50">
@@ -21,7 +18,7 @@ export default function Messages() {
         </div>
 
         <div className="flex flex-col gap-3">
-          {users.map((user) => (
+          {connections.map((user) => (
             <div key={user._id} className="max-w-xl flex flex-wrap gap-5 p-6 bg-white rounded-md">
               <img
                 src={user.profile_picture}

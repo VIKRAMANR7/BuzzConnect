@@ -18,6 +18,8 @@ interface RecentMessage {
   };
 }
 
+const POLL_INTERVAL = 30_000;
+
 export default function RecentMessages() {
   const { user } = useUser();
   const { getToken } = useAuth();
@@ -25,45 +27,39 @@ export default function RecentMessages() {
   const [messages, setMessages] = useState<RecentMessage[]>([]);
 
   const fetchRecent = useCallback(async () => {
-    try {
-      const token = await getToken();
-      if (!token) {
-        return;
-      }
+    const token = await getToken();
+    if (!token) return;
 
-      const { data } = await api.get("/api/user/recent-messages", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const { data } = await api.get("/api/user/recent-messages", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-      if (!data.success) {
-        toast.error(data.message);
-        return;
-      }
-
-      const grouped: Record<string, RecentMessage> = {};
-
-      (data.messages as RecentMessage[]).forEach((msg) => {
-        const sender = msg.from_user_id._id;
-        if (!grouped[sender] || new Date(msg.createdAt) > new Date(grouped[sender].createdAt)) {
-          grouped[sender] = msg;
-        }
-      });
-
-      const sorted = Object.values(grouped).sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
-
-      setMessages(sorted);
-    } catch {
-      toast.error("Unable to fetch recent messages");
+    if (!data.success) {
+      toast.error(data.message);
+      return;
     }
+
+    const grouped: Record<string, RecentMessage> = {};
+
+    (data.messages as RecentMessage[]).forEach((msg) => {
+      const sender = msg.from_user_id._id;
+      if (!grouped[sender] || new Date(msg.createdAt) > new Date(grouped[sender].createdAt)) {
+        grouped[sender] = msg;
+      }
+    });
+
+    const sorted = Object.values(grouped).sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    setMessages(sorted);
   }, [getToken]);
 
   useEffect(() => {
     if (!user) return;
 
     fetchRecent();
-    const interval = setInterval(fetchRecent, 30_000);
+    const interval = setInterval(fetchRecent, POLL_INTERVAL);
     return () => clearInterval(interval);
   }, [user, fetchRecent]);
 

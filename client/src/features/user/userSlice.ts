@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../../api/axios";
-import { toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import type { DisplayUser } from "../../types/user";
 
 interface UserState {
@@ -16,7 +16,7 @@ export const fetchUser = createAsyncThunk("user/fetchUser", async (token: string
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  return data.success ? (data.user as DisplayUser) : null;
+  return data.success ? data.user : null;
 });
 
 export const updateUser = createAsyncThunk(
@@ -28,7 +28,7 @@ export const updateUser = createAsyncThunk(
 
     if (data.success) {
       toast.success(data.message);
-      return data.user as DisplayUser;
+      return data.user;
     }
 
     toast.error(data.message);

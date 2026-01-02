@@ -1,7 +1,7 @@
 {
   "name": "buzzconnect-server",
   "version": "1.0.0",
-  "description": "A modular TypeScript Express backend with authentication, media uploads, real-time messaging, MongoDB data models, and Inngest-driven background workflows.",
+  "description": "Backend for BuzzConnect social media platform with authentication, media uploads, real-time messaging, and background workflows.",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {

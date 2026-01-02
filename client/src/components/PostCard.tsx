@@ -10,11 +10,11 @@ import api from "../api/axios";
 import type { RootState } from "../types/store";
 import type { Post } from "../types/post";
 
-interface Props {
+interface PostCardProps {
   post: Post;
 }
 
-export default function PostCard({ post }: Props) {
+export default function PostCard({ post }: PostCardProps) {
   const navigate = useNavigate();
   const { getToken } = useAuth();
 
@@ -29,30 +29,27 @@ export default function PostCard({ post }: Props) {
   const handleLike = useCallback(async () => {
     if (!currentUser) return;
 
-    try {
-      const token = await getToken();
+    const token = await getToken();
 
-      const { data } = await api.post(
-        "/api/post/like",
-        { postId: post._id },
-        { headers: { Authorization: `Bearer ${token}` } }
+    const { data } = await api.post(
+      "/api/post/like",
+      { postId: post._id },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (data.success) {
+      setLikes((prev) =>
+        prev.includes(currentUser._id)
+          ? prev.filter((id) => id !== currentUser._id)
+          : [...prev, currentUser._id]
       );
-
-      if (data.success) {
-        setLikes((prev) =>
-          prev.includes(currentUser._id)
-            ? prev.filter((id) => id !== currentUser._id)
-            : [...prev, currentUser._id]
-        );
-      } else toast.error(data.message);
-    } catch {
-      toast.error("Unable to like post");
+    } else {
+      toast.error(data.message);
     }
   }, [currentUser, getToken, post._id]);
 
   return (
     <div className="bg-white rounded-xl shadow p-4 space-y-4 w-full max-w-2xl">
-      {/* Header */}
       <div
         className="inline-flex items-center gap-3 cursor-pointer"
         onClick={() => navigate(`/profile/${post.user._id}`)}
@@ -74,7 +71,6 @@ export default function PostCard({ post }: Props) {
         </div>
       </div>
 
-      {/* Content */}
       {post.content && (
         <div
           className="text-gray-800 text-sm whitespace-pre-line"
@@ -82,7 +78,6 @@ export default function PostCard({ post }: Props) {
         />
       )}
 
-      {/* Images */}
       <div className="grid grid-cols-2 gap-2">
         {post.image_urls.map((img) => (
           <img
@@ -96,7 +91,6 @@ export default function PostCard({ post }: Props) {
         ))}
       </div>
 
-      {/* Actions */}
       <div className="flex items-center gap-4 text-gray-600 text-sm pt-2 border-t border-gray-300">
         <button onClick={handleLike} className="flex items-center gap-1 cursor-pointer">
           <Heart

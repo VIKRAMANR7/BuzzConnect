@@ -1,13 +1,12 @@
 import cors from "cors";
 import "dotenv/config";
-import express, { Request, Response } from "express";
+import express from "express";
+import { clerkMiddleware } from "@clerk/express";
+import { serve } from "inngest/express";
 
 import connectDB from "./configs/db.js";
 import { validateEnv } from "./configs/validateEnv.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-
-import { clerkMiddleware } from "@clerk/express";
-import { serve } from "inngest/express";
 import { functions, inngest } from "./inngest/index.js";
 
 import userRouter from "./routes/userRoutes.js";
@@ -31,14 +30,8 @@ app.use(
 app.use(express.json());
 app.use(clerkMiddleware());
 
-// Simple Logger
-app.use((req, _res, next) => {
-  console.log(`[${req.method}] ${req.path}`);
-  next();
-});
-
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Buzzconnect Server is Live");
+app.get("/", (_req, res) => {
+  res.send("BuzzConnect Server is Live");
 });
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
@@ -50,10 +43,10 @@ app.use("/api/message", messageRouter);
 
 app.use(errorHandler);
 
-const PORT = Number(process.env.PORT) || 4000;
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Buzzconnect Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
 
 export default app;
