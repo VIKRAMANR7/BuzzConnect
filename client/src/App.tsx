@@ -35,14 +35,14 @@ export default function App() {
   }, [pathname]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    async function fetchData() {
       if (!user) return;
       const token = await getToken();
       if (!token) return;
 
       dispatch(fetchUser(token));
       dispatch(fetchConnections(token));
-    };
+    }
 
     fetchData();
   }, [user, getToken, dispatch]);

@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Pencil } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
@@ -27,30 +27,27 @@ export default function ProfileModal({ setShowEdit }: ProfileModalProps) {
     cover_photo: null as File | null,
   });
 
-  const handleSaveProfile = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  async function handleSaveProfile(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-      const token = await getToken();
-      if (!token) {
-        toast.error("Authentication error");
-        return;
-      }
+    const token = await getToken();
+    if (!token) {
+      toast.error("Authentication error");
+      return;
+    }
 
-      const form = new FormData();
-      form.append("username", editForm.username);
-      form.append("bio", editForm.bio);
-      form.append("location", editForm.location);
-      form.append("full_name", editForm.full_name);
+    const form = new FormData();
+    form.append("username", editForm.username);
+    form.append("bio", editForm.bio);
+    form.append("location", editForm.location);
+    form.append("full_name", editForm.full_name);
 
-      if (editForm.profile_picture) form.append("profile", editForm.profile_picture);
-      if (editForm.cover_photo) form.append("cover", editForm.cover_photo);
+    if (editForm.profile_picture) form.append("profile", editForm.profile_picture);
+    if (editForm.cover_photo) form.append("cover", editForm.cover_photo);
 
-      dispatch(updateUser({ userData: form, token }));
-      setShowEdit(false);
-    },
-    [editForm, getToken, dispatch, setShowEdit]
-  );
+    dispatch(updateUser({ userData: form, token }));
+    setShowEdit(false);
+  }
 
   if (!user) return null;
 

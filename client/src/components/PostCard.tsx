@@ -1,7 +1,7 @@
 import { useAuth } from "@clerk/clerk-react";
 import { BadgeCheck, Heart, MessageCircle, Share2 } from "lucide-react";
 import moment from "moment";
-import { useState, useMemo, useCallback } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -21,12 +21,9 @@ export default function PostCard({ post }: PostCardProps) {
   const currentUser = useSelector((state: RootState) => state.user.value);
   const [likes, setLikes] = useState<string[]>(post.likes_count);
 
-  const postWithHashtags = useMemo(
-    () => post.content.replace(/(#\w+)/g, "<span class='text-indigo-600'>$1</span>"),
-    [post.content]
-  );
+  const postWithHashtags = post.content.replace(/(#\w+)/g, "<span class='text-indigo-600'>$1</span>");
 
-  const handleLike = useCallback(async () => {
+  async function handleLike() {
     if (!currentUser) return;
 
     const token = await getToken();
@@ -46,7 +43,7 @@ export default function PostCard({ post }: PostCardProps) {
     } else {
       toast.error(data.message);
     }
-  }, [currentUser, getToken, post._id]);
+  }
 
   return (
     <div className="bg-white rounded-xl shadow p-4 space-y-4 w-full max-w-2xl">

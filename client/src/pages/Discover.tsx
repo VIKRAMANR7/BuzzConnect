@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { Search } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import api from "../api/axios";
@@ -19,31 +19,28 @@ export default function Discover() {
   const [users, setUsers] = useState<DisplayUser[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = useCallback(
-    async (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key !== "Enter") return;
+  async function handleSearch(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== "Enter") return;
 
-      setLoading(true);
-      setUsers([]);
+    setLoading(true);
+    setUsers([]);
 
-      const token = await getToken();
-      const { data } = await api.post(
-        "/api/user/discover",
-        { input },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+    const token = await getToken();
+    const { data } = await api.post(
+      "/api/user/discover",
+      { input },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
 
-      if (data.success) {
-        setUsers(data.users);
-      } else {
-        toast.error(data.message);
-      }
+    if (data.success) {
+      setUsers(data.users);
+    } else {
+      toast.error(data.message);
+    }
 
-      setLoading(false);
-      setInput("");
-    },
-    [input, getToken]
-  );
+    setLoading(false);
+    setInput("");
+  }
 
   useEffect(() => {
     getToken().then((token) => {

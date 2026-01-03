@@ -1,6 +1,6 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
 import moment from "moment";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
@@ -26,42 +26,42 @@ export default function RecentMessages() {
 
   const [messages, setMessages] = useState<RecentMessage[]>([]);
 
-  const fetchRecent = useCallback(async () => {
-    const token = await getToken();
-    if (!token) return;
+  useEffect(() => {
+    async function fetchRecent() {
+      const token = await getToken();
+      if (!token) return;
 
-    const { data } = await api.get("/api/user/recent-messages", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const { data } = await api.get("/api/user/recent-messages", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    if (!data.success) {
-      toast.error(data.message);
-      return;
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+
+      const grouped: Record<string, RecentMessage> = {};
+
+      (data.messages as RecentMessage[]).forEach((msg) => {
+        const sender = msg.from_user_id._id;
+        if (!grouped[sender] || new Date(msg.createdAt) > new Date(grouped[sender].createdAt)) {
+          grouped[sender] = msg;
+        }
+      });
+
+      const sorted = Object.values(grouped).sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setMessages(sorted);
     }
 
-    const grouped: Record<string, RecentMessage> = {};
-
-    (data.messages as RecentMessage[]).forEach((msg) => {
-      const sender = msg.from_user_id._id;
-      if (!grouped[sender] || new Date(msg.createdAt) > new Date(grouped[sender].createdAt)) {
-        grouped[sender] = msg;
-      }
-    });
-
-    const sorted = Object.values(grouped).sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-
-    setMessages(sorted);
-  }, [getToken]);
-
-  useEffect(() => {
     if (!user) return;
 
     fetchRecent();
     const interval = setInterval(fetchRecent, POLL_INTERVAL);
     return () => clearInterval(interval);
-  }, [user, fetchRecent]);
+  }, [user, getToken]);
 
   return (
     <div className="bg-white max-w-xs mt-4 p-4 min-h-20 rounded-md shadow text-xs text-slate-800">

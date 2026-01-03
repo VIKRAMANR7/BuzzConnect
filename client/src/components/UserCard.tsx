@@ -3,7 +3,6 @@ import { MapPin, MessageCircle, Plus, UserPlus } from "lucide-react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
 
 import api from "../api/axios";
 import { fetchUser } from "../features/user/userSlice";
@@ -22,7 +21,7 @@ export default function UserCard({ user }: UserCardProps) {
 
   const currentUser = useSelector((state: RootState) => state.user.value);
 
-  const handleFollow = useCallback(async () => {
+  async function handleFollow() {
     const token = await getToken();
     if (!token) {
       toast.error("Not authenticated");
@@ -41,9 +40,9 @@ export default function UserCard({ user }: UserCardProps) {
     } else {
       toast.error(data.message);
     }
-  }, [getToken, user._id, dispatch]);
+  }
 
-  const handleConnection = useCallback(async () => {
+  async function handleConnection() {
     if (currentUser?.connections.includes(user._id)) {
       navigate(`/messages/${user._id}`);
       return;
@@ -62,7 +61,7 @@ export default function UserCard({ user }: UserCardProps) {
     );
 
     data.success ? toast.success(data.message) : toast.error(data.message);
-  }, [getToken, user._id, currentUser, navigate]);
+  }
 
   const isFollowing = Boolean(currentUser?.following.includes(user._id));
   const isConnected = Boolean(currentUser?.connections.includes(user._id));

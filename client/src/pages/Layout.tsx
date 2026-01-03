@@ -1,7 +1,8 @@
 import { Menu, X } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
+
 import Loading from "../components/Loading";
 import Sidebar from "../components/Sidebar";
 import type { RootState } from "../types/store";
@@ -10,11 +11,9 @@ export default function Layout() {
   const user = useSelector((state: RootState) => state.user.value);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const toggleSidebar = useCallback(() => {
-    setSidebarOpen((prev) => !prev);
-  }, []);
+  if (!user) return <Loading />;
 
-  return user ? (
+  return (
     <div className="w-full flex h-screen">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
@@ -25,16 +24,14 @@ export default function Layout() {
       {sidebarOpen ? (
         <X
           className="absolute top-3 right-3 p-2 z-100 bg-white rounded-md shadow size-10 text-gray-600 sm:hidden"
-          onClick={toggleSidebar}
+          onClick={() => setSidebarOpen(false)}
         />
       ) : (
         <Menu
           className="absolute top-3 right-3 p-2 z-100 bg-white rounded-md shadow size-10 text-gray-600 sm:hidden"
-          onClick={toggleSidebar}
+          onClick={() => setSidebarOpen(true)}
         />
       )}
     </div>
-  ) : (
-    <Loading />
   );
 }

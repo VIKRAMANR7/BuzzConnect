@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { MessageSquare, UserCheck, UserPlus, UserRoundPen, Users } from "lucide-react";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -21,54 +21,50 @@ export default function Connections() {
     (s: RootState) => s.connections
   );
 
-  const reloadConnections = useCallback(async () => {
+  async function reloadConnections() {
     const token = await getToken();
     if (token) dispatch(fetchConnections(token));
-  }, [dispatch, getToken]);
+  }
 
-  const handleUnfollow = useCallback(
-    async (userId: string) => {
-      const token = await getToken();
-      if (!token) return;
-      const { data } = await api.post(
-        "/api/user/unfollow",
-        { id: userId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      data.success ? toast.success(data.message) : toast.error(data.message);
-      await reloadConnections();
-    },
-    [getToken, reloadConnections]
-  );
+  async function handleUnfollow(userId: string) {
+    const token = await getToken();
+    if (!token) return;
 
-  const acceptConnection = useCallback(
-    async (userId: string) => {
-      const token = await getToken();
-      if (!token) return;
-      const { data } = await api.post(
-        "/api/user/accept",
-        { id: userId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      data.success ? toast.success(data.message) : toast.error(data.message);
-      await reloadConnections();
-    },
-    [getToken, reloadConnections]
-  );
+    const { data } = await api.post(
+      "/api/user/unfollow",
+      { id: userId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    data.success ? toast.success(data.message) : toast.error(data.message);
+    await reloadConnections();
+  }
+
+  async function acceptConnection(userId: string) {
+    const token = await getToken();
+    if (!token) return;
+
+    const { data } = await api.post(
+      "/api/user/accept",
+      { id: userId },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    data.success ? toast.success(data.message) : toast.error(data.message);
+    await reloadConnections();
+  }
 
   useEffect(() => {
     reloadConnections();
-  }, [reloadConnections]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const tabs = useMemo(
-    () => [
-      { label: "Followers", value: followers, icon: Users },
-      { label: "Following", value: following, icon: UserCheck },
-      { label: "Pending", value: pendingConnections, icon: UserRoundPen },
-      { label: "Connections", value: connections, icon: UserPlus },
-    ],
-    [followers, following, pendingConnections, connections]
-  );
+  const tabs = [
+    { label: "Followers", value: followers, icon: Users },
+    { label: "Following", value: following, icon: UserCheck },
+    { label: "Pending", value: pendingConnections, icon: UserRoundPen },
+    { label: "Connections", value: connections, icon: UserPlus },
+  ];
 
   const activeTab = tabs.find((t) => t.label === currentTab) ?? tabs[0];
 

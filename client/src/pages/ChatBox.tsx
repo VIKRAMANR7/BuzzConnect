@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import { ImageIcon, SendHorizonal } from "lucide-react";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -25,14 +25,30 @@ export default function ChatBox() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  const loadMessages = useCallback(async () => {
-    if (!userId) return;
-    const token = await getToken();
-    if (!token) return;
-    dispatch(fetchMessages({ token, userId }));
+  useEffect(() => {
+    async function loadMessages() {
+      if (!userId) return;
+      const token = await getToken();
+      if (!token) return;
+      dispatch(fetchMessages({ token, userId }));
+    }
+
+    loadMessages();
+    return () => {
+      dispatch(resetMessages());
+    };
   }, [userId, getToken, dispatch]);
 
-  const sendMessage = useCallback(async () => {
+  useEffect(() => {
+    const found = connections.find((c) => c._id === userId) || null;
+    setOtherUser(found);
+  }, [connections, userId]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  async function sendMessage() {
     if (!userId) return;
     if (!text.trim() && !image) return;
 
@@ -55,29 +71,11 @@ export default function ChatBox() {
     } else {
       toast.error(data.message);
     }
-  }, [userId, text, image, getToken, dispatch]);
+  }
 
-  useEffect(() => {
-    loadMessages();
-    return () => {
-      dispatch(resetMessages());
-    };
-  }, [loadMessages, dispatch]);
-
-  useEffect(() => {
-    const found = connections.find((c) => c._id === userId) || null;
-    setOtherUser(found ?? null);
-  }, [connections, userId]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const sortedMessages = useMemo(() => {
-    return [...messages].sort(
-      (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    );
-  }, [messages]);
+  const sortedMessages = [...messages].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  );
 
   if (!otherUser) return null;
 

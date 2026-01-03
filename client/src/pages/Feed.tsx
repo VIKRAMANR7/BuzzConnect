@@ -1,5 +1,5 @@
 import { useAuth } from "@clerk/clerk-react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import api from "../api/axios";
@@ -17,30 +17,30 @@ export default function Feed() {
   const [feeds, setFeeds] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchFeeds = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      const token = await getToken();
-      const { data } = await api.get("/api/post/feed", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (data.success) {
-        setFeeds(data.posts);
-      } else {
-        toast.error(data.message);
-      }
-    } catch {
-      toast.error("Unable to load feed");
-    } finally {
-      setLoading(false);
-    }
-  }, [getToken]);
-
   useEffect(() => {
+    async function fetchFeeds() {
+      try {
+        setLoading(true);
+
+        const token = await getToken();
+        const { data } = await api.get("/api/post/feed", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (data.success) {
+          setFeeds(data.posts);
+        } else {
+          toast.error(data.message);
+        }
+      } catch {
+        toast.error("Unable to load feed");
+      } finally {
+        setLoading(false);
+      }
+    }
+
     fetchFeeds();
-  }, [fetchFeeds]);
+  }, [getToken]);
 
   return loading ? (
     <Loading />
@@ -55,7 +55,6 @@ export default function Feed() {
         </div>
       </div>
 
-      {/* Right Sidebar */}
       <div className="max-xl:hidden sticky top-0">
         <div className="max-w-xs bg-white text-xs p-4 rounded-md inline-flex flex-col gap-2 shadow">
           <h3 className="text-slate-800 font-semibold">Sponsored</h3>

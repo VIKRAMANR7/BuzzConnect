@@ -1,9 +1,9 @@
+import { useAuth } from "@clerk/clerk-react";
 import { Image, X } from "lucide-react";
-import { useState, useCallback, ChangeEvent } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@clerk/clerk-react";
 
 import api from "../api/axios";
 import type { RootState } from "../types/store";
@@ -17,17 +17,17 @@ export default function CreatePost() {
   const [images, setImages] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleImageUpload = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const list = e.target.files;
     if (!list) return;
     setImages((prev) => [...prev, ...Array.from(list)]);
-  }, []);
+  }
 
-  const removeImage = useCallback((index: number) => {
+  function removeImage(index: number) {
     setImages((prev) => prev.filter((_, i) => i !== index));
-  }, []);
+  }
 
-  const handleSubmit = useCallback(async () => {
+  async function handleSubmit() {
     if (!content && images.length === 0) {
       toast.error("Please add text or at least one image");
       return;
@@ -57,7 +57,7 @@ export default function CreatePost() {
     }
 
     setLoading(false);
-  }, [content, images, getToken, navigate]);
+  }
 
   if (!user) return null;
 

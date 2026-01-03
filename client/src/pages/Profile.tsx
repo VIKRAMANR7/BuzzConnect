@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react";
 import moment from "moment";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -26,8 +26,8 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState<"posts" | "media" | "likes">("posts");
   const [showEdit, setShowEdit] = useState(false);
 
-  const fetchUser = useCallback(
-    async (id: string) => {
+  useEffect(() => {
+    async function fetchUserProfile(id: string) {
       const token = await getToken();
       const { data } = await api.post(
         "/api/user/profiles",
@@ -41,14 +41,11 @@ export default function Profile() {
       } else {
         toast.error(data.message);
       }
-    },
-    [getToken]
-  );
+    }
 
-  useEffect(() => {
     const idToLoad = profileId || currentUser?._id;
-    if (idToLoad) fetchUser(idToLoad);
-  }, [profileId, currentUser, fetchUser]);
+    if (idToLoad) fetchUserProfile(idToLoad);
+  }, [profileId, currentUser, getToken]);
 
   if (!user) return <Loading />;
 
